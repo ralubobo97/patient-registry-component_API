@@ -2,11 +2,15 @@ const express = require('express');
 const mysql = require('mysql');
 const logger = require('morgan');
 const config = require('./config');
+const bodyParser = require('body-parser')
 
 const app = express();
 const router = express.Router();
 
 const routes = require('./routes/index.js');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use(logger('dev'));
 
