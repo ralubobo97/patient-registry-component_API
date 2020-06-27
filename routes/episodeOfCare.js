@@ -7,4 +7,8 @@ module.exports = (router) => {
     router.get('/episodeOfCare/getEpisodesOfCareByPatientCNP', controller.getEpisodesOfCareByPatientCNP);
     router.get('/episodeOfCare/getPatientInformationByEOCCode', controller.getPatientInformationByEOCCode);
     router.post('/episodeOfCare/updateEpisodeOfCare', controller.updateEpisodeOfCare);
+    router.post('/episodeOfCare/saveNewEpisodeOfCare', controller.saveNewEpisodeOfCare);
+    router.get('/episodeOfCare/getLastRegisteredEOC', controller.getLastRegisteredEOC);
+    router.get('/episodeOfCare/getPatientByCNP', controller.getPatientByCNP);
+    router.post('/episodeOfCare/saveNewPatient', controller.saveNewPatient);
 }
