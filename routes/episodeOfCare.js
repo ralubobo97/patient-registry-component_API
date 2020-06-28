@@ -11,4 +11,5 @@ module.exports = (router) => {
     router.get('/episodeOfCare/getLastRegisteredEOC', controller.getLastRegisteredEOC);
     router.get('/episodeOfCare/getPatientByCNP', controller.getPatientByCNP);
     router.post('/episodeOfCare/saveNewPatient', controller.saveNewPatient);
+    router.get('/episodeOfCare/getPatientLastID', controller.getPatientLastID);
 }

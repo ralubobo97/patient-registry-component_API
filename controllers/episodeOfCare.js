@@ -484,7 +484,7 @@ module.exports = {
     saveNewEpisodeOfCare: (req, res, next) => {
         let { patientID, episodeOfCareForm, patientForm, patientDetailsForm, medicalDataForm  } = req.body;
         let dateFormat = '%d.%m.%Y';
-
+        
         let query = `INSERT INTO episode_of_care (code, patient_id, date, department_id) 
                         VALUES (${episodeOfCareForm.eocCode}, ${patientID}, STR_TO_DATE('${episodeOfCareForm.eocDate}', '${dateFormat}'), ${episodeOfCareForm.departmentID}); 
                     UPDATE  patients SET firstname = '${patientForm.firstname}', lastname = '${patientForm.lastname}', pid_series = '${patientForm.series}', 
@@ -560,34 +560,34 @@ module.exports = {
         query += `INSERT INTO medical_data (patient_id, blood_type, rh, ahc, observations, allergies, contraindications, lifestyle, date) VALUES (${patientID}`;
         
         if(medicalDataForm.bloodType) {
-            query += `, '${patientDetailsForm.bloodType}'`;
+            query += `, '${medicalDataForm.bloodType}'`;
         } else { query += `, null`; }
 
         if(medicalDataForm.rh) {
-            query += `, '${patientDetailsForm.rh}'`;
+            query += `, '${medicalDataForm.rh}'`;
         } else { query += `, null`; }
 
         if(medicalDataForm.ahc) {
-            query += `, '${patientDetailsForm.ahc}'`;
+            query += `, '${medicalDataForm.ahc}'`;
         } else { query += `, null`; }
 
         if(medicalDataForm.observations) {
-            query += `, '${patientDetailsForm.observations}'`;
+            query += `, '${medicalDataForm.observations}'`;
         } else { query += `, null`; }
 
         if(medicalDataForm.allergies) {
-            query += `, '${patientDetailsForm.allergies}'`;
+            query += `, '${medicalDataForm.allergies}'`;
         } else { query += `, null`; }
 
         if(medicalDataForm.contraindications) {
-            query += `, '${patientDetailsForm.contraindications}'`;
+            query += `, '${medicalDataForm.contraindications}'`;
         } else { query += `, null`; }
 
         if(medicalDataForm.lifestyle) {
-            query += `, '${patientDetailsForm.lifestyle}'`;
+            query += `, '${medicalDataForm.lifestyle}'`;
         } else { query += `, null`; }
 
-        query += `, STR_TO_DATE('${episodeOfCareForm.eocDate}', '${dateFormat}')); `;
+        query += `, STR_TO_DATE('${episodeOfCareForm.eocDate}', '${dateFormat}'));`;
              
         db.query(query, (error, response) => {
             if(error){
@@ -600,6 +600,138 @@ module.exports = {
     },
 
     saveNewPatient: (req, res, next) => {
+        let { newPatientID, newPatientEOCForm, newPatientForm, newPatientDetailsForm, newPatientMedicalDataForm } = req.body;
+        let dateFormat = '%d.%m.%Y';
 
+        let query = `INSERT INTO patients (id, firstname, lastname, cnp, cid, birthdate, birth_weight, gender, personal_id, pid_series, pid_number, issued_by, issue_date) 
+                        VALUES (${newPatientID}, '${newPatientForm.firstname}', '${newPatientForm.lastname}', '${newPatientForm.cnp}', '${newPatientForm.cid}', 
+                                STR_TO_DATE('${newPatientForm.birthdate}', '${dateFormat}'), ${newPatientForm.birthWeight}, '${newPatientForm.gender}', 
+                                '${newPatientForm.idType}', '${newPatientForm.series}', '${newPatientForm.seriesNumber}', '${newPatientForm.issuedBy}', 
+                                STR_TO_DATE('${newPatientForm.issueDate}', '${dateFormat}')); 
+                    INSERT INTO episode_of_care (code, patient_id, date, department_id) 
+                        VALUES (${newPatientEOCForm.eocCode}, ${newPatientID}, STR_TO_DATE('${newPatientEOCForm.eocDate}', '${dateFormat}'), ${newPatientEOCForm.departmentID}); 
+                    INSERT INTO addresses (patient_id, country, county, city, nationality, street, number, building, apartment, date) 
+                        VALUES (${newPatientID}`;
+        
+        // ADDRESS details
+        if(newPatientDetailsForm.country) {
+            query += `, '${newPatientDetailsForm.country}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.county) {
+            query += `, '${newPatientDetailsForm.county}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.city) {
+            query += `, '${newPatientDetailsForm.city}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.nationality) {
+            query += `, '${newPatientDetailsForm.nationality}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.street) {
+            query += `, '${newPatientDetailsForm.street}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.streetNumber) {
+            query += `, ${newPatientDetailsForm.streetNumber}`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.building) {
+            query += `, '${newPatientDetailsForm.building}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.apartment) {
+            query += `, ${newPatientDetailsForm.apartment}`;
+        } else { query += `, null`; }
+
+        query += `, STR_TO_DATE('${newPatientEOCForm.eocDate}', '${dateFormat}')); `;
+
+        // HEALTH INSURANCE details
+        query += `INSERT INTO health_insurance (patient_id, insurance_status, insurance_type, family_doctor, card, card_type, card_number, date) 
+                    VALUES (${newPatientID}`;
+        
+        if(newPatientDetailsForm.insuranceStatus) {
+            query += `, '${newPatientDetailsForm.insuranceStatus}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.insuranceType) {
+            query += `, '${newPatientDetailsForm.insuranceType}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.familyDoctor) {
+            query += `, '${newPatientDetailsForm.familyDoctor}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.card) {
+            query += `, '${newPatientDetailsForm.card}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.cardType) {
+            query += `, '${newPatientDetailsForm.cardType}'`;
+        } else { query += `, null`; }
+
+        if(newPatientDetailsForm.cardNumber) {
+            query += `, ${newPatientDetailsForm.cardNumber}`;
+        } else { query += `, null`; }
+        
+        query += `, STR_TO_DATE('${newPatientEOCForm.eocDate}', '${dateFormat}')); `;
+
+        // MEDICAL DATA details
+        query += `INSERT INTO medical_data (patient_id, blood_type, rh, ahc, observations, allergies, contraindications, lifestyle, date) 
+                    VALUES (${newPatientID}`;
+        
+        if(newPatientMedicalDataForm.bloodType) {
+            query += `, '${newPatientMedicalDataForm.bloodType}'`;
+        } else { query += `, null`; }
+
+        if(newPatientMedicalDataForm.rh) {
+            query += `, '${newPatientMedicalDataForm.rh}'`;
+        } else { query += `, null`; }
+
+        if(newPatientMedicalDataForm.ahc) {
+            query += `, '${newPatientMedicalDataForm.ahc}'`;
+        } else { query += `, null`; }
+
+        if(newPatientMedicalDataForm.observations) {
+            query += `, '${newPatientMedicalDataForm.observations}'`;
+        } else { query += `, null`; }
+
+        if(newPatientMedicalDataForm.allergies) {
+            query += `, '${newPatientMedicalDataForm.allergies}'`;
+        } else { query += `, null`; }
+
+        if(newPatientMedicalDataForm.contraindications) {
+            query += `, '${newPatientMedicalDataForm.contraindications}'`;
+        } else { query += `, null`; }
+
+        if(newPatientMedicalDataForm.lifestyle) {
+            query += `, '${newPatientMedicalDataForm.lifestyle}'`;
+        } else { query += `, null`; }
+
+        query += `, STR_TO_DATE('${newPatientEOCForm.eocDate}', '${dateFormat}'));`;
+
+        db.query(query, (error, response) => {
+            if(error){
+                res.status(500).send();
+                throw error;
+            }
+            res.status(200).send();
+            next();
+        });
+    },
+
+    getPatientLastID: (req, res, next) => {
+        let query = `SELECT id FROM patients ORDER BY id DESC LIMIT 1;`;
+
+        db.query(query, (error, response) => {
+            if(error){
+                res.status(500).send();
+                throw error;
+            }
+            res.status(200).send(response);
+            next();
+        });
     }
 }

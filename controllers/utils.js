@@ -8,11 +8,8 @@ function formatDate(date){
 }
 
 function reformatDate(date){
-    let d = date.split('.');
-    let day = d[0];
-    let month = d[1];
-    let year = d[2];
-    return `${year}-${month}-${day}`;
+    let d = date.split('T')[0];
+    return d;
 }
 
 module.exports = {
